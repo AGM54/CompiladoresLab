@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.*;
 public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListener {
 
     private final Map<String, List<Reservation>> reservations = new HashMap<>();
+    private static final Duration MAX_RESERVATION_DURATION = Duration.ofHours(2);
 
     @Override
     public void enterReserveStat(ConfRoomSchedulerParser.ReserveStatContext ctx) {
@@ -36,6 +38,13 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
 
         if (!start.isBefore(end)) {
             System.out.println("Error: La hora de inicio debe ser anterior a la hora de fin para " + id + " en " + date);
+            return;
+        }
+
+        // Validar que la duración de la reserva no exceda el límite máximo
+        Duration reservationDuration = Duration.between(start, end);
+        if (reservationDuration.compareTo(MAX_RESERVATION_DURATION) > 0) {
+            System.out.println("Error: La duración de la reserva para " + id + " en " + date + " excede el límite máximo de " + MAX_RESERVATION_DURATION.toHours() + " horas");
             return;
         }
 
