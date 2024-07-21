@@ -4,25 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListener {
 
-    private final Map<String, String> reservations = new HashMap<>();
+    private final Map<String, List<Reservation>> reservations = new HashMap<>();
 
     @Override
     public void enterReserveStat(ConfRoomSchedulerParser.ReserveStatContext ctx) {
-        TerminalNode dateNode = ctx.reserve().DATE();
-        if (dateNode == null) {
-            System.out.println("Error: Formato de fecha inválido");
-            return;
-        }
-        String date = dateNode.getText();
         String id = ctx.reserve().ID().getText();
+        String date = ctx.reserve().DATE().getText();
         String startTime = ctx.reserve().TIME(0).getText();
         String endTime = ctx.reserve().TIME(1).getText();
-        String key = date + " " + startTime + "-" + endTime;
 
         // Validar que la fecha es válida
         if (!isValidDate(date)) {
@@ -36,32 +29,39 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             return;
         }
 
-        // Validar que la hora de inicio es anterior a la hora de fin
-        if (!isStartTimeBeforeEndTime(startTime, endTime)) {
+        LocalTime start = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime end = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        if (!start.isBefore(end)) {
             System.out.println("Error: La hora de inicio debe ser anterior a la hora de fin para " + id + " en " + date);
             return;
         }
 
-        if (reservations.containsKey(key)) {
-            System.out.println("Error: La sala ya está reservada para esa fecha y hora.");
-        } else {
-            reservations.put(key, id);
-            System.out.println("Reserva exitosa: " + id + " para " + key);
+        Reservation newReservation = new Reservation(localDate, start, end);
+
+        // Verificar solapamientos
+        if (!reservations.containsKey(id)) {
+            reservations.put(id, new ArrayList<>());
         }
+        for (Reservation existingReservation : reservations.get(id)) {
+            if (existingReservation.overlapsWith(newReservation)) {
+                System.out.println("Error: Reserva solapada para " + id + " en " + date + " de " + startTime + " a " + endTime);
+                return;
+            }
+        }
+
+        // Añadir la reserva
+        reservations.get(id).add(newReservation);
+        System.out.println("Reserva exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime);
     }
 
     @Override
     public void enterCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx) {
-        TerminalNode dateNode = ctx.cancel().DATE();
-        if (dateNode == null) {
-            System.out.println("Error: Formato de fecha inválido");
-            return;
-        }
-        String date = dateNode.getText();
         String id = ctx.cancel().ID().getText();
+        String date = ctx.cancel().DATE().getText();
         String startTime = ctx.cancel().TIME(0).getText();
         String endTime = ctx.cancel().TIME(1).getText();
-        String key = date + " " + startTime + "-" + endTime;
 
         // Validar que la fecha es válida
         if (!isValidDate(date)) {
@@ -75,28 +75,23 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             return;
         }
 
-        if (reservations.containsKey(key) && reservations.get(key).equals(id)) {
-            reservations.remove(key);
-            System.out.println("Cancelación exitosa: " + id + " para " + key);
+        LocalTime start = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime end = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        Reservation reservationToCancel = new Reservation(localDate, start, end);
+
+        if (reservations.containsKey(id) && reservations.get(id).remove(reservationToCancel)) {
+            System.out.println("Cancelación exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime);
         } else {
             System.out.println("Error: No existe una reserva para cancelar en esa fecha y hora.");
         }
     }
 
-    private boolean isStartTimeBeforeEndTime(String startTime, String endTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime start = LocalTime.parse(startTime, formatter);
-        LocalTime end = LocalTime.parse(endTime, formatter);
-        return start.isBefore(end);
-    }
-
     private boolean isValidDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
-            LocalDate parsedDate = LocalDate.parse(date, formatter);
-            if (parsedDate.getDayOfMonth() != Integer.parseInt(date.substring(0, 2))) {
-                return false;
-            }
+            LocalDate.parse(date, formatter);
             return true;
         } catch (DateTimeParseException e) {
             return false;
@@ -110,6 +105,35 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             return true;
         } catch (DateTimeParseException e) {
             return false;
+        }
+    }
+
+    private static class Reservation {
+        private final LocalDate date;
+        private final LocalTime start;
+        private final LocalTime end;
+
+        public Reservation(LocalDate date, LocalTime start, LocalTime end) {
+            this.date = date;
+            this.start = start;
+            this.end = end;
+        }
+
+        public boolean overlapsWith(Reservation other) {
+            return this.date.equals(other.date) && !(this.end.isBefore(other.start) || this.start.isAfter(other.end));
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Reservation that = (Reservation) o;
+            return date.equals(that.date) && start.equals(that.start) && end.equals(that.end);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(date, start, end);
         }
     }
 }

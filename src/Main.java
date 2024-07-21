@@ -7,7 +7,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String inputFile = Paths.get("src/test.txt").toAbsolutePath().toString();
 
-        // Lee el archivo de entrada
         CharStream input = CharStreams.fromFileName(inputFile);
 
         // Crea el lexer y el parser
