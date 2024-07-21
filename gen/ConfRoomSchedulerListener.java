@@ -41,6 +41,18 @@ public interface ConfRoomSchedulerListener extends ParseTreeListener {
 	 */
 	void exitCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code listarStat}
+	 * labeled alternative in {@link ConfRoomSchedulerParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterListarStat(ConfRoomSchedulerParser.ListarStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code listarStat}
+	 * labeled alternative in {@link ConfRoomSchedulerParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitListarStat(ConfRoomSchedulerParser.ListarStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code blank}
 	 * labeled alternative in {@link ConfRoomSchedulerParser#stat}.
 	 * @param ctx the parse tree
@@ -72,4 +84,14 @@ public interface ConfRoomSchedulerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCancel(ConfRoomSchedulerParser.CancelContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ConfRoomSchedulerParser#listar}.
+	 * @param ctx the parse tree
+	 */
+	void enterListar(ConfRoomSchedulerParser.ListarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ConfRoomSchedulerParser#listar}.
+	 * @param ctx the parse tree
+	 */
+	void exitListar(ConfRoomSchedulerParser.ListarContext ctx);
 }
