@@ -526,7 +526,7 @@ public class ConfRoomSchedulerParser extends Parser {
 			setState(57);
 			match(ID);
 			setState(58);
-			match(T__1);
+			match(T__2);
 			setState(59);
 			match(DATE);
 			setState(60);
@@ -642,7 +642,7 @@ public class ConfRoomSchedulerParser extends Parser {
 		"01\u0005\u0002\u0000\u000012\u0005\n\u0000\u000023\u0005\u0003\u0000\u0000"+
 		"34\u0005\u000b\u0000\u000045\u0005\u0004\u0000\u000056\u0005\u000b\u0000"+
 		"\u00006\u0007\u0001\u0000\u0000\u000078\u0005\u0007\u0000\u000089\u0005"+
-		"\t\u0000\u00009:\u0005\f\u0000\u0000:;\u0005\u0002\u0000\u0000;<\u0005"+
+		"\t\u0000\u00009:\u0005\f\u0000\u0000:;\u0005\u0003\u0000\u0000;<\u0005"+
 		"\n\u0000\u0000<=\u0005\u0003\u0000\u0000=>\u0005\u000b\u0000\u0000>?\u0005"+
 		"\u0004\u0000\u0000?@\u0005\u000b\u0000\u0000@A\u0005\u0004\u0000\u0000"+
 		"AB\u0005\n\u0000\u0000BC\u0005\u0003\u0000\u0000CD\u0005\u000b\u0000\u0000"+

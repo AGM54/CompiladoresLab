@@ -2,11 +2,10 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import java.nio.file.Paths;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        // Ruta del archivo de entrada (ajusta la ruta según sea necesario)
         String inputFile = Paths.get("src/test.txt").toAbsolutePath().toString();
 
         // Lee el archivo de entrada
@@ -24,17 +23,5 @@ public class Main {
         ConfRoomSchedulerSemanticChecker semanticChecker = new ConfRoomSchedulerSemanticChecker();
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(semanticChecker, tree);
-
-        // Realizar la primera verificación de notificaciones inmediatamente
-        semanticChecker.notifyUpcomingReservations();
-
-        // Configura el sistema de notificaciones para verificar cada minuto
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                semanticChecker.notifyUpcomingReservations();
-            }
-        }, 0, 60000);
     }
 }
