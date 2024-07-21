@@ -14,6 +14,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
 
     @Override
     public void enterReserveStat(ConfRoomSchedulerParser.ReserveStatContext ctx) {
+        String roomType = ctx.reserve().TIPO_SALA().getText();
         String id = ctx.reserve().ID().getText();
         String date = ctx.reserve().DATE().getText();
         String startTime = ctx.reserve().TIME(0).getText();
@@ -48,26 +49,28 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             return;
         }
 
-        Reservation newReservation = new Reservation(localDate, start, end, description);
+        Reservation newReservation = new Reservation(roomType, localDate, start, end, description);
 
         // Verificar solapamientos
-        if (!reservations.containsKey(id)) {
-            reservations.put(id, new ArrayList<>());
+        String reservationKey = roomType + "_" + id;
+        if (!reservations.containsKey(reservationKey)) {
+            reservations.put(reservationKey, new ArrayList<>());
         }
-        for (Reservation existingReservation : reservations.get(id)) {
+        for (Reservation existingReservation : reservations.get(reservationKey)) {
             if (existingReservation.overlapsWith(newReservation)) {
-                System.out.println("Error: Reserva solapada para " + id + " en " + date + " de " + startTime + " a " + endTime);
+                System.out.println("Error: Reserva solapada para " + roomType + " " + id + " en " + date + " de " + startTime + " a " + endTime);
                 return;
             }
         }
 
         // Añadir la reserva
-        reservations.get(id).add(newReservation);
-        System.out.println("Reserva exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime + " " + description);
+        reservations.get(reservationKey).add(newReservation);
+        System.out.println("Reserva exitosa: " + roomType + " " + id + " para " + date + " de " + startTime + " a " + endTime + " " + description);
     }
 
     @Override
     public void enterCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx) {
+        String roomType = ctx.cancel().TIPO_SALA().getText();
         String id = ctx.cancel().ID().getText();
         String date = ctx.cancel().DATE().getText();
         String startTime = ctx.cancel().TIME(0).getText();
@@ -89,10 +92,11 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         LocalTime end = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        Reservation reservationToCancel = new Reservation(localDate, start, end, "");
+        Reservation reservationToCancel = new Reservation(roomType, localDate, start, end, "");
 
-        if (reservations.containsKey(id) && reservations.get(id).remove(reservationToCancel)) {
-            System.out.println("Cancelación exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime);
+        String reservationKey = roomType + "_" + id;
+        if (reservations.containsKey(reservationKey) && reservations.get(reservationKey).remove(reservationToCancel)) {
+            System.out.println("Cancelación exitosa: " + roomType + " " + id + " para " + date + " de " + startTime + " a " + endTime);
         } else {
             System.out.println("Error: No existe una reserva para cancelar en esa fecha y hora.");
         }
@@ -101,8 +105,11 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
     @Override
     public void enterListarStat(ConfRoomSchedulerParser.ListarStatContext ctx) {
         System.out.println("Lista de reservas:");
-        reservations.forEach((id, resList) -> {
-            System.out.println("Sala " + id + ":");
+        reservations.forEach((key, resList) -> {
+            String[] parts = key.split("_");
+            String roomType = parts[0];
+            String id = parts[1];
+            System.out.println("Sala de " + roomType + " " + id + ":");
             resList.forEach(res -> System.out.println("  Fecha: " + res.date + " de " + res.start + " a " + res.end + " " + res.description));
         });
     }
@@ -128,12 +135,14 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
     }
 
     private static class Reservation {
+        private final String roomType;
         private final LocalDate date;
         private final LocalTime start;
         private final LocalTime end;
         private final String description;
 
-        public Reservation(LocalDate date, LocalTime start, LocalTime end, String description) {
+        public Reservation(String roomType, LocalDate date, LocalTime start, LocalTime end, String description) {
+            this.roomType = roomType;
             this.date = date;
             this.start = start;
             this.end = end;
@@ -149,12 +158,12 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Reservation that = (Reservation) o;
-            return date.equals(that.date) && start.equals(that.start) && end.equals(that.end);
+            return roomType.equals(that.roomType) && date.equals(that.date) && start.equals(that.start) && end.equals(that.end);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(date, start, end);
+            return Objects.hash(roomType, date, start, end);
         }
     }
 }

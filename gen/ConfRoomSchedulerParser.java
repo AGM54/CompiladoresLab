@@ -16,8 +16,8 @@ public class ConfRoomSchedulerParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, DATE=8, TIME=9, 
-		ID=10, DESCRIPTION=11, COMMENT=12, NEWLINE=13, WS=14;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, TIPO_SALA=8, DATE=9, 
+		TIME=10, ID=11, DESCRIPTION=12, COMMENT=13, NEWLINE=14, WS=15;
 	public static final int
 		RULE_prog = 0, RULE_stat = 1, RULE_reserve = 2, RULE_cancel = 3, RULE_listar = 4;
 	private static String[] makeRuleNames() {
@@ -36,8 +36,8 @@ public class ConfRoomSchedulerParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, "DATE", "TIME", "ID", 
-			"DESCRIPTION", "COMMENT", "NEWLINE", "WS"
+			null, null, null, null, null, null, null, null, "TIPO_SALA", "DATE", 
+			"TIME", "ID", "DESCRIPTION", "COMMENT", "NEWLINE", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -138,7 +138,7 @@ public class ConfRoomSchedulerParser extends Parser {
 				setState(13); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 8386L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 16578L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -308,6 +308,7 @@ public class ConfRoomSchedulerParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ReserveContext extends ParserRuleContext {
+		public TerminalNode TIPO_SALA() { return getToken(ConfRoomSchedulerParser.TIPO_SALA, 0); }
 		public TerminalNode ID() { return getToken(ConfRoomSchedulerParser.ID, 0); }
 		public TerminalNode DATE() { return getToken(ConfRoomSchedulerParser.DATE, 0); }
 		public List<TerminalNode> TIME() { return getTokens(ConfRoomSchedulerParser.TIME); }
@@ -344,27 +345,29 @@ public class ConfRoomSchedulerParser extends Parser {
 			setState(27);
 			match(T__0);
 			setState(28);
-			match(ID);
+			match(TIPO_SALA);
 			setState(29);
-			match(T__1);
+			match(ID);
 			setState(30);
-			match(DATE);
+			match(T__1);
 			setState(31);
-			match(T__2);
+			match(DATE);
 			setState(32);
-			match(TIME);
+			match(T__2);
 			setState(33);
-			match(T__3);
-			setState(34);
 			match(TIME);
-			setState(37);
+			setState(34);
+			match(T__3);
+			setState(35);
+			match(TIME);
+			setState(38);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__4) {
 				{
-				setState(35);
-				match(T__4);
 				setState(36);
+				match(T__4);
+				setState(37);
 				match(DESCRIPTION);
 				}
 			}
@@ -384,6 +387,7 @@ public class ConfRoomSchedulerParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class CancelContext extends ParserRuleContext {
+		public TerminalNode TIPO_SALA() { return getToken(ConfRoomSchedulerParser.TIPO_SALA, 0); }
 		public TerminalNode ID() { return getToken(ConfRoomSchedulerParser.ID, 0); }
 		public TerminalNode DATE() { return getToken(ConfRoomSchedulerParser.DATE, 0); }
 		public List<TerminalNode> TIME() { return getTokens(ConfRoomSchedulerParser.TIME); }
@@ -415,21 +419,23 @@ public class ConfRoomSchedulerParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(39);
-			match(T__5);
 			setState(40);
-			match(ID);
+			match(T__5);
 			setState(41);
-			match(T__1);
+			match(TIPO_SALA);
 			setState(42);
-			match(DATE);
+			match(ID);
 			setState(43);
-			match(T__2);
+			match(T__1);
 			setState(44);
-			match(TIME);
+			match(DATE);
 			setState(45);
-			match(T__3);
+			match(T__2);
 			setState(46);
+			match(TIME);
+			setState(47);
+			match(T__3);
+			setState(48);
 			match(TIME);
 			}
 		}
@@ -471,7 +477,7 @@ public class ConfRoomSchedulerParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(50);
 			match(T__6);
 			}
 		}
@@ -487,37 +493,39 @@ public class ConfRoomSchedulerParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u000e3\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u000f5\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
 		"\u0000\u0004\u0000\f\b\u0000\u000b\u0000\f\u0000\r\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0003\u0001\u001a\b\u0001\u0001\u0002\u0001\u0002"+
 		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
-		"\u0001\u0002\u0001\u0002\u0003\u0002&\b\u0002\u0001\u0003\u0001\u0003"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002\'\b\u0002\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0000\u0000\u0005\u0000"+
-		"\u0002\u0004\u0006\b\u0000\u00002\u0000\u000b\u0001\u0000\u0000\u0000"+
-		"\u0002\u0019\u0001\u0000\u0000\u0000\u0004\u001b\u0001\u0000\u0000\u0000"+
-		"\u0006\'\u0001\u0000\u0000\u0000\b0\u0001\u0000\u0000\u0000\n\f\u0003"+
-		"\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000\u0000\f\r\u0001\u0000\u0000"+
-		"\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e\u0001\u0000\u0000\u0000"+
-		"\u000e\u0001\u0001\u0000\u0000\u0000\u000f\u0010\u0003\u0004\u0002\u0000"+
-		"\u0010\u0011\u0005\r\u0000\u0000\u0011\u001a\u0001\u0000\u0000\u0000\u0012"+
-		"\u0013\u0003\u0006\u0003\u0000\u0013\u0014\u0005\r\u0000\u0000\u0014\u001a"+
-		"\u0001\u0000\u0000\u0000\u0015\u0016\u0003\b\u0004\u0000\u0016\u0017\u0005"+
-		"\r\u0000\u0000\u0017\u001a\u0001\u0000\u0000\u0000\u0018\u001a\u0005\r"+
-		"\u0000\u0000\u0019\u000f\u0001\u0000\u0000\u0000\u0019\u0012\u0001\u0000"+
-		"\u0000\u0000\u0019\u0015\u0001\u0000\u0000\u0000\u0019\u0018\u0001\u0000"+
-		"\u0000\u0000\u001a\u0003\u0001\u0000\u0000\u0000\u001b\u001c\u0005\u0001"+
-		"\u0000\u0000\u001c\u001d\u0005\n\u0000\u0000\u001d\u001e\u0005\u0002\u0000"+
-		"\u0000\u001e\u001f\u0005\b\u0000\u0000\u001f \u0005\u0003\u0000\u0000"+
-		" !\u0005\t\u0000\u0000!\"\u0005\u0004\u0000\u0000\"%\u0005\t\u0000\u0000"+
-		"#$\u0005\u0005\u0000\u0000$&\u0005\u000b\u0000\u0000%#\u0001\u0000\u0000"+
-		"\u0000%&\u0001\u0000\u0000\u0000&\u0005\u0001\u0000\u0000\u0000\'(\u0005"+
-		"\u0006\u0000\u0000()\u0005\n\u0000\u0000)*\u0005\u0002\u0000\u0000*+\u0005"+
-		"\b\u0000\u0000+,\u0005\u0003\u0000\u0000,-\u0005\t\u0000\u0000-.\u0005"+
-		"\u0004\u0000\u0000./\u0005\t\u0000\u0000/\u0007\u0001\u0000\u0000\u0000"+
-		"01\u0005\u0007\u0000\u00001\t\u0001\u0000\u0000\u0000\u0003\r\u0019%";
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0000\u0000\u0005\u0000\u0002\u0004\u0006\b\u0000\u00004\u0000\u000b"+
+		"\u0001\u0000\u0000\u0000\u0002\u0019\u0001\u0000\u0000\u0000\u0004\u001b"+
+		"\u0001\u0000\u0000\u0000\u0006(\u0001\u0000\u0000\u0000\b2\u0001\u0000"+
+		"\u0000\u0000\n\f\u0003\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000\u0000"+
+		"\f\r\u0001\u0000\u0000\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e\u0001"+
+		"\u0000\u0000\u0000\u000e\u0001\u0001\u0000\u0000\u0000\u000f\u0010\u0003"+
+		"\u0004\u0002\u0000\u0010\u0011\u0005\u000e\u0000\u0000\u0011\u001a\u0001"+
+		"\u0000\u0000\u0000\u0012\u0013\u0003\u0006\u0003\u0000\u0013\u0014\u0005"+
+		"\u000e\u0000\u0000\u0014\u001a\u0001\u0000\u0000\u0000\u0015\u0016\u0003"+
+		"\b\u0004\u0000\u0016\u0017\u0005\u000e\u0000\u0000\u0017\u001a\u0001\u0000"+
+		"\u0000\u0000\u0018\u001a\u0005\u000e\u0000\u0000\u0019\u000f\u0001\u0000"+
+		"\u0000\u0000\u0019\u0012\u0001\u0000\u0000\u0000\u0019\u0015\u0001\u0000"+
+		"\u0000\u0000\u0019\u0018\u0001\u0000\u0000\u0000\u001a\u0003\u0001\u0000"+
+		"\u0000\u0000\u001b\u001c\u0005\u0001\u0000\u0000\u001c\u001d\u0005\b\u0000"+
+		"\u0000\u001d\u001e\u0005\u000b\u0000\u0000\u001e\u001f\u0005\u0002\u0000"+
+		"\u0000\u001f \u0005\t\u0000\u0000 !\u0005\u0003\u0000\u0000!\"\u0005\n"+
+		"\u0000\u0000\"#\u0005\u0004\u0000\u0000#&\u0005\n\u0000\u0000$%\u0005"+
+		"\u0005\u0000\u0000%\'\u0005\f\u0000\u0000&$\u0001\u0000\u0000\u0000&\'"+
+		"\u0001\u0000\u0000\u0000\'\u0005\u0001\u0000\u0000\u0000()\u0005\u0006"+
+		"\u0000\u0000)*\u0005\b\u0000\u0000*+\u0005\u000b\u0000\u0000+,\u0005\u0002"+
+		"\u0000\u0000,-\u0005\t\u0000\u0000-.\u0005\u0003\u0000\u0000./\u0005\n"+
+		"\u0000\u0000/0\u0005\u0004\u0000\u000001\u0005\n\u0000\u00001\u0007\u0001"+
+		"\u0000\u0000\u000023\u0005\u0007\u0000\u00003\t\u0001\u0000\u0000\u0000"+
+		"\u0003\r\u0019&";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
