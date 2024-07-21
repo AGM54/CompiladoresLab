@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
         String inputFile = Paths.get("src/test.txt").toAbsolutePath().toString();
 
         // Lee el archivo de entrada
