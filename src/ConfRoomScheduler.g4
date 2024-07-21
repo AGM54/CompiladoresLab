@@ -14,6 +14,7 @@ cancel: 'CANCELAR' ID 'PARA' DATE 'DE' TIME 'A' TIME ;
 DATE: DIGIT DIGIT '/' DIGIT DIGIT '/' DIGIT DIGIT DIGIT DIGIT ;
 TIME: DIGIT DIGIT ':' DIGIT DIGIT ;
 ID  : [a-zA-Z0-9]+ ;
+COMMENT: '//' ~[\r\n]* -> skip ;
 NEWLINE: '\r'? '\n' ;
 WS  : [ \t]+ -> skip ;
 

@@ -16,8 +16,8 @@ public class ConfRoomSchedulerParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, DATE=6, TIME=7, ID=8, NEWLINE=9, 
-		WS=10;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, DATE=6, TIME=7, ID=8, COMMENT=9, 
+		NEWLINE=10, WS=11;
 	public static final int
 		RULE_prog = 0, RULE_stat = 1, RULE_reserve = 2, RULE_cancel = 3;
 	private static String[] makeRuleNames() {
@@ -35,8 +35,8 @@ public class ConfRoomSchedulerParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, "DATE", "TIME", "ID", "NEWLINE", 
-			"WS"
+			null, null, null, null, null, null, "DATE", "TIME", "ID", "COMMENT", 
+			"NEWLINE", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -137,7 +137,7 @@ public class ConfRoomSchedulerParser extends Parser {
 				setState(11); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 546L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1058L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -399,7 +399,7 @@ public class ConfRoomSchedulerParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\n)\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u000b)\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0004\u0000\n\b"+
 		"\u0000\u000b\u0000\f\u0000\u000b\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001\u0015\b\u0001\u0001"+
@@ -412,9 +412,9 @@ public class ConfRoomSchedulerParser extends Parser {
 		"\u0002\u0001\u0000\t\b\u0001\u0000\u0000\u0000\n\u000b\u0001\u0000\u0000"+
 		"\u0000\u000b\t\u0001\u0000\u0000\u0000\u000b\f\u0001\u0000\u0000\u0000"+
 		"\f\u0001\u0001\u0000\u0000\u0000\r\u000e\u0003\u0004\u0002\u0000\u000e"+
-		"\u000f\u0005\t\u0000\u0000\u000f\u0015\u0001\u0000\u0000\u0000\u0010\u0011"+
-		"\u0003\u0006\u0003\u0000\u0011\u0012\u0005\t\u0000\u0000\u0012\u0015\u0001"+
-		"\u0000\u0000\u0000\u0013\u0015\u0005\t\u0000\u0000\u0014\r\u0001\u0000"+
+		"\u000f\u0005\n\u0000\u0000\u000f\u0015\u0001\u0000\u0000\u0000\u0010\u0011"+
+		"\u0003\u0006\u0003\u0000\u0011\u0012\u0005\n\u0000\u0000\u0012\u0015\u0001"+
+		"\u0000\u0000\u0000\u0013\u0015\u0005\n\u0000\u0000\u0014\r\u0001\u0000"+
 		"\u0000\u0000\u0014\u0010\u0001\u0000\u0000\u0000\u0014\u0013\u0001\u0000"+
 		"\u0000\u0000\u0015\u0003\u0001\u0000\u0000\u0000\u0016\u0017\u0005\u0001"+
 		"\u0000\u0000\u0017\u0018\u0005\b\u0000\u0000\u0018\u0019\u0005\u0002\u0000"+
