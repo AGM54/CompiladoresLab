@@ -13,13 +13,60 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
 
     @Override
     public void enterReserveStat(ConfRoomSchedulerParser.ReserveStatContext ctx) {
-        String roomType = ctx.reserve().TIPO_SALA().getText();
-        String id = ctx.reserve().ID().getText();
-        String date = ctx.reserve().DATE().getText();
-        String startTime = ctx.reserve().TIME(0).getText();
-        String endTime = ctx.reserve().TIME(1).getText();
-        String description = ctx.reserve().DESCRIPTION() != null ? ctx.reserve().DESCRIPTION().getText() : "";
+        handleReservation(ctx.reserve().TIPO_SALA().getText(), ctx.reserve().ID().getText(), ctx.reserve().DATE().getText(), ctx.reserve().TIME(0).getText(), ctx.reserve().TIME(1).getText(), ctx.reserve().DESCRIPTION() != null ? ctx.reserve().DESCRIPTION().getText() : "");
+    }
 
+    @Override
+    public void enterCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx) {
+        handleCancellation(ctx.cancel().TIPO_SALA().getText(), ctx.cancel().ID().getText(), ctx.cancel().DATE().getText(), ctx.cancel().TIME(0).getText(), ctx.cancel().TIME(1).getText());
+    }
+
+    @Override
+    public void enterReprogramarStat(ConfRoomSchedulerParser.ReprogramarStatContext ctx) {
+        String roomType = ctx.reprogramar().TIPO_SALA().getText();
+        String id = ctx.reprogramar().ID().getText();
+        String oldDate = ctx.reprogramar().DATE(0).getText();
+        String oldStartTime = ctx.reprogramar().TIME(0).getText();
+        String oldEndTime = ctx.reprogramar().TIME(1).getText();
+        String newDate = ctx.reprogramar().DATE(1).getText();
+        String newStartTime = ctx.reprogramar().TIME(2).getText();
+        String newEndTime = ctx.reprogramar().TIME(3).getText();
+
+        // Cancelar la reserva anterior
+        handleCancellation(roomType, id, oldDate, oldStartTime, oldEndTime);
+
+        // Intentar reservar la nueva
+        handleReservation(roomType, id, newDate, newStartTime, newEndTime, "");
+    }
+
+    @Override
+    public void enterListarStat(ConfRoomSchedulerParser.ListarStatContext ctx) {
+        System.out.println("Lista de reservas:");
+        reservations.forEach((key, resList) -> {
+            String[] parts = key.split("_");
+            String roomType = parts[0];
+            String id = parts[1];
+            System.out.println("Sala de " + roomType + " " + id + ":");
+            resList.forEach(res -> System.out.println("  Fecha: " + res.date + " de " + res.start + " a " + res.end + " " + res.description));
+        });
+    }
+
+    public void notifyUpcomingReservations() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("Hora actual del sistema: " + now);  // Imprime la hora actual del sistema
+        reservations.forEach((key, resList) -> {
+            for (Reservation res : resList) {
+                LocalDateTime startDateTime = LocalDateTime.of(res.date, res.start);
+                Duration timeUntilStart = Duration.between(now, startDateTime);
+                System.out.println("Verificando reserva para " + res.roomType + " " + key.split("_")[1] + " que comienza a " + startDateTime + " (" + timeUntilStart.toMinutes() + " minutos restantes)");
+                if (!timeUntilStart.isNegative() && timeUntilStart.compareTo(NOTIFICATION_THRESHOLD) <= 0) {
+                    System.out.println("Notificación: La reserva para " + res.roomType + " " + key.split("_")[1] + " comienza en " + timeUntilStart.toMinutes() + " minutos.");
+                }
+            }
+        });
+    }
+
+    private void handleReservation(String roomType, String id, String date, String startTime, String endTime, String description) {
         // Validar que la fecha es válida
         if (!isValidDate(date)) {
             System.out.println("Error: Fecha inválida " + date);
@@ -67,14 +114,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         System.out.println("Reserva exitosa: " + roomType + " " + id + " para " + date + " de " + startTime + " a " + endTime + " " + description);
     }
 
-    @Override
-    public void enterCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx) {
-        String roomType = ctx.cancel().TIPO_SALA().getText();
-        String id = ctx.cancel().ID().getText();
-        String date = ctx.cancel().DATE().getText();
-        String startTime = ctx.cancel().TIME(0).getText();
-        String endTime = ctx.cancel().TIME(1).getText();
-
+    private void handleCancellation(String roomType, String id, String date, String startTime, String endTime) {
         // Validar que la fecha es válida
         if (!isValidDate(date)) {
             System.out.println("Error: Fecha inválida " + date);
@@ -99,33 +139,6 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         } else {
             System.out.println("Error: No existe una reserva para cancelar en esa fecha y hora.");
         }
-    }
-
-    @Override
-    public void enterListarStat(ConfRoomSchedulerParser.ListarStatContext ctx) {
-        System.out.println("Lista de reservas:");
-        reservations.forEach((key, resList) -> {
-            String[] parts = key.split("_");
-            String roomType = parts[0];
-            String id = parts[1];
-            System.out.println("Sala de " + roomType + " " + id + ":");
-            resList.forEach(res -> System.out.println("  Fecha: " + res.date + " de " + res.start + " a " + res.end + " " + res.description));
-        });
-    }
-
-    public void notifyUpcomingReservations() {
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println("Hora actual del sistema: " + now);  // Imprime la hora actual del sistema
-        reservations.forEach((key, resList) -> {
-            for (Reservation res : resList) {
-                LocalDateTime startDateTime = LocalDateTime.of(res.date, res.start);
-                Duration timeUntilStart = Duration.between(now, startDateTime);
-                System.out.println("Verificando reserva para " + res.roomType + " " + key.split("_")[1] + " que comienza a " + startDateTime + " (" + timeUntilStart.toMinutes() + " minutos restantes)");
-                if (!timeUntilStart.isNegative() && timeUntilStart.compareTo(NOTIFICATION_THRESHOLD) <= 0) {
-                    System.out.println("Notificación: La reserva para " + res.roomType + " " + key.split("_")[1] + " comienza en " + timeUntilStart.toMinutes() + " minutos.");
-                }
-            }
-        });
     }
 
     private boolean isValidDate(String date) {

@@ -4,6 +4,7 @@ prog: stat+ ;
 
 stat: reserve NEWLINE                # reserveStat
     | cancel NEWLINE                 # cancelStat
+    | reprogramar NEWLINE            # reprogramarStat
     | listar NEWLINE                 # listarStat
     | NEWLINE                        # blank
     ;
@@ -11,6 +12,8 @@ stat: reserve NEWLINE                # reserveStat
 reserve: 'RESERVAR' TIPO_SALA ID 'PARA' DATE 'DE' TIME 'A' TIME ('DESCRIPCION' DESCRIPTION)? ;
 
 cancel: 'CANCELAR' TIPO_SALA ID 'PARA' DATE 'DE' TIME 'A' TIME ;
+
+reprogramar: 'REPROGRAMAR' TIPO_SALA ID 'PARA' DATE 'DE' TIME 'A' TIME 'A' DATE 'DE' TIME 'A' TIME ;
 
 listar: 'LISTAR' ;
 
