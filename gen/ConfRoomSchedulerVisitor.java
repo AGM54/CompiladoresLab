@@ -30,6 +30,13 @@ public interface ConfRoomSchedulerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCancelStat(ConfRoomSchedulerParser.CancelStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code reprogramarStat}
+	 * labeled alternative in {@link ConfRoomSchedulerParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReprogramarStat(ConfRoomSchedulerParser.ReprogramarStatContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code listarStat}
 	 * labeled alternative in {@link ConfRoomSchedulerParser#stat}.
 	 * @param ctx the parse tree
@@ -55,6 +62,12 @@ public interface ConfRoomSchedulerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCancel(ConfRoomSchedulerParser.CancelContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ConfRoomSchedulerParser#reprogramar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReprogramar(ConfRoomSchedulerParser.ReprogramarContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ConfRoomSchedulerParser#listar}.
 	 * @param ctx the parse tree

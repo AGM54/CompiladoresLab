@@ -52,6 +52,18 @@ public class ConfRoomSchedulerBaseListener implements ConfRoomSchedulerListener 
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReprogramarStat(ConfRoomSchedulerParser.ReprogramarStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReprogramarStat(ConfRoomSchedulerParser.ReprogramarStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterListarStat(ConfRoomSchedulerParser.ListarStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -95,6 +107,18 @@ public class ConfRoomSchedulerBaseListener implements ConfRoomSchedulerListener 
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCancel(ConfRoomSchedulerParser.CancelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReprogramar(ConfRoomSchedulerParser.ReprogramarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReprogramar(ConfRoomSchedulerParser.ReprogramarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
