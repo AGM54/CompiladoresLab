@@ -16,6 +16,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         String date = ctx.reserve().DATE().getText();
         String startTime = ctx.reserve().TIME(0).getText();
         String endTime = ctx.reserve().TIME(1).getText();
+        String description = ctx.reserve().DESCRIPTION() != null ? ctx.reserve().DESCRIPTION().getText() : "";
 
         // Validar que la fecha es válida
         if (!isValidDate(date)) {
@@ -38,7 +39,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             return;
         }
 
-        Reservation newReservation = new Reservation(localDate, start, end);
+        Reservation newReservation = new Reservation(localDate, start, end, description);
 
         // Verificar solapamientos
         if (!reservations.containsKey(id)) {
@@ -53,7 +54,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
 
         // Añadir la reserva
         reservations.get(id).add(newReservation);
-        System.out.println("Reserva exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime);
+        System.out.println("Reserva exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime + " " + description);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         LocalTime end = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        Reservation reservationToCancel = new Reservation(localDate, start, end);
+        Reservation reservationToCancel = new Reservation(localDate, start, end, "");
 
         if (reservations.containsKey(id) && reservations.get(id).remove(reservationToCancel)) {
             System.out.println("Cancelación exitosa: " + id + " para " + date + " de " + startTime + " a " + endTime);
@@ -112,11 +113,13 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
         private final LocalDate date;
         private final LocalTime start;
         private final LocalTime end;
+        private final String description;
 
-        public Reservation(LocalDate date, LocalTime start, LocalTime end) {
+        public Reservation(LocalDate date, LocalTime start, LocalTime end, String description) {
             this.date = date;
             this.start = start;
             this.end = end;
+            this.description = description;
         }
 
         public boolean overlapsWith(Reservation other) {
