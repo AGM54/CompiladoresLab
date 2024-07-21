@@ -1,8 +1,6 @@
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -11,6 +9,7 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
 
     private final Map<String, List<Reservation>> reservations = new HashMap<>();
     private static final Duration MAX_RESERVATION_DURATION = Duration.ofHours(2);
+    private static final Duration NOTIFICATION_THRESHOLD = Duration.ofMinutes(30);
 
     @Override
     public void enterReserveStat(ConfRoomSchedulerParser.ReserveStatContext ctx) {
@@ -111,6 +110,21 @@ public class ConfRoomSchedulerSemanticChecker extends ConfRoomSchedulerBaseListe
             String id = parts[1];
             System.out.println("Sala de " + roomType + " " + id + ":");
             resList.forEach(res -> System.out.println("  Fecha: " + res.date + " de " + res.start + " a " + res.end + " " + res.description));
+        });
+    }
+
+    public void notifyUpcomingReservations() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("Hora actual del sistema: " + now);  // Imprime la hora actual del sistema
+        reservations.forEach((key, resList) -> {
+            for (Reservation res : resList) {
+                LocalDateTime startDateTime = LocalDateTime.of(res.date, res.start);
+                Duration timeUntilStart = Duration.between(now, startDateTime);
+                System.out.println("Verificando reserva para " + res.roomType + " " + key.split("_")[1] + " que comienza a " + startDateTime + " (" + timeUntilStart.toMinutes() + " minutos restantes)");
+                if (!timeUntilStart.isNegative() && timeUntilStart.compareTo(NOTIFICATION_THRESHOLD) <= 0) {
+                    System.out.println("Notificación: La reserva para " + res.roomType + " " + key.split("_")[1] + " comienza en " + timeUntilStart.toMinutes() + " minutos.");
+                }
+            }
         });
     }
 
